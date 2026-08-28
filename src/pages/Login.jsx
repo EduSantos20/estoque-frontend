@@ -62,9 +62,9 @@ export default function Login() {
           </button>
         </form>
 
-        <div className="login-dica">
+        {/* <div className="login-dica">
           Usuário administrador padrão: <strong>admin</strong> / senha: <strong>admin123</strong>
-        </div>
+        </div>*/}
       </div>
     </div>
   )
