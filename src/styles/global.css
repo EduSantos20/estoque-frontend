@@ -746,7 +746,7 @@ input, select {
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 720px) {
   .topbar {
     padding: 12px 16px;
   }
@@ -914,4 +914,75 @@ input, select {
 .modal-total strong {
   color: var(--green-500);
   font-size: 15px;
+}
+
+/* ---------- Selo de tamanho (usado no modal de pedido) ---------- */
+.tamanho-selo {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.4);
+  color: var(--green-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.modal-linha-titulo {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+.modal-linha-info.sugerido {
+  color: var(--texto-suave);
+  font-weight: 500;
+}
+
+.input-laranja {
+  color: var(--laranja) !important;
+  border-color: rgba(251,146,60,0.4) !important;
+  font-weight: 800 !important;
+}
+
+.btn-header.laranja {
+  background: var(--laranja);
+  color: #3a1a03;
+}
+.btn-header.laranja:hover { filter: brightness(1.08); }
+.btn-header.laranja:disabled { opacity: 0.5; }
+
+/* ---------- Abas de categoria (Campo / Futsal / Society) ---------- */
+.abas-categoria {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 5px;
+  width: fit-content;
+}
+
+.aba-categoria {
+  padding: 8px 20px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--texto-suave);
+  font-weight: 700;
+  font-size: 13.5px;
+}
+
+.aba-categoria:hover {
+  color: var(--texto);
+}
+
+.aba-categoria.ativa {
+  background: var(--green-600);
+  color: white;
 }

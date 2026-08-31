@@ -22,7 +22,10 @@ export default function RelatorioDetalhe() {
     return <div className="conteudo"><p>Relatório não encontrado.</p></div>
   }
 
-  const detalhesOrdenados = [...relatorio.detalhes].sort((a, b) => a.tamanho - b.tamanho)
+  const detalhesOrdenados = [...relatorio.detalhes].sort((a, b) => {
+    if (a.categoria !== b.categoria) return a.categoria.localeCompare(b.categoria)
+    return a.tamanho - b.tamanho
+  })
 
   return (
     <div className="conteudo">
@@ -45,6 +48,7 @@ export default function RelatorioDetalhe() {
       <table className="tabela">
         <thead>
           <tr>
+            <th>Categoria</th>
             <th>Tamanho</th>
             <th>Vendas na semana</th>
             <th>Estoque final</th>
@@ -54,7 +58,8 @@ export default function RelatorioDetalhe() {
         </thead>
         <tbody>
           {detalhesOrdenados.map((d) => (
-            <tr key={d.tamanho}>
+            <tr key={`${d.categoria}-${d.tamanho}`}>
+              <td>{d.categoria}</td>
               <td><strong>{d.tamanho}</strong></td>
               <td>{d.vendas}</td>
               <td>{d.estoqueFinal}</td>
@@ -63,7 +68,7 @@ export default function RelatorioDetalhe() {
             </tr>
           ))}
           <tr style={{ fontWeight: 700 }}>
-            <td>Total</td>
+            <td colSpan={2}>Total</td>
             <td>{relatorio.totalVendas}</td>
             <td colSpan={3}></td>
           </tr>

@@ -20,11 +20,14 @@ CREATE TABLE usuarios (
 );
 
 CREATE TABLE estoque_tamanho (
-    tamanho         INTEGER PRIMARY KEY CHECK (tamanho BETWEEN 34 AND 43),
+    id              BIGSERIAL PRIMARY KEY,
+    categoria       VARCHAR(20) NOT NULL CHECK (categoria IN ('CAMPO', 'FUTSAL', 'SOCIETY')),
+    tamanho         INTEGER NOT NULL CHECK (tamanho BETWEEN 34 AND 43),
     estoque         INTEGER NOT NULL DEFAULT 0 CHECK (estoque >= 0),
     vendas_semana   INTEGER NOT NULL DEFAULT 0 CHECK (vendas_semana >= 0),
     a_caminho       INTEGER NOT NULL DEFAULT 0 CHECK (a_caminho >= 0),
-    meta            INTEGER NOT NULL DEFAULT 10 CHECK (meta >= 0)
+    meta            INTEGER NOT NULL DEFAULT 10 CHECK (meta >= 0),
+    UNIQUE (categoria, tamanho)
 );
 
 CREATE TABLE relatorio_semanal (
@@ -39,6 +42,7 @@ CREATE TABLE relatorio_semanal (
 CREATE TABLE relatorio_detalhe (
     id                  BIGSERIAL PRIMARY KEY,
     relatorio_id        BIGINT NOT NULL REFERENCES relatorio_semanal(id) ON DELETE CASCADE,
+    categoria           VARCHAR(20) NOT NULL,
     tamanho             INTEGER NOT NULL,
     vendas              INTEGER NOT NULL DEFAULT 0,
     estoque_final       INTEGER NOT NULL DEFAULT 0,
@@ -46,9 +50,11 @@ CREATE TABLE relatorio_detalhe (
     compra_sugerida     INTEGER NOT NULL DEFAULT 0
 );
 
--- Seed dos 10 tamanhos fixos (34 a 43)
-INSERT INTO estoque_tamanho (tamanho, estoque, vendas_semana, a_caminho, meta)
-SELECT g, 0, 0, 0, 10 FROM generate_series(34, 43) AS g;
+-- Seed das 3 categorias x 10 tamanhos fixos (34 a 43) = 30 linhas
+INSERT INTO estoque_tamanho (categoria, tamanho, estoque, vendas_semana, a_caminho, meta)
+SELECT c, g, 0, 0, 0, 10
+FROM unnest(ARRAY['CAMPO', 'FUTSAL', 'SOCIETY']) AS c
+CROSS JOIN generate_series(34, 43) AS g;
 
 -- Usuario administrador padrao (senha: admin123 -- troque em producao!)
 -- A senha real com hash BCrypt e criada automaticamente pela aplicacao

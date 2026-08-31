@@ -9,14 +9,16 @@ Stack: **Java + Spring Boot** (backend) · **React + Vite** (frontend) · **Post
 ## Funcionalidades
 
 - Login com dois níveis de permissão: **Administrador** e **Usuário comum**
-- Grade fixa de tamanhos (34 a 43) com:
+- **3 grades de estoque independentes**: Campo, Futsal e Society — cada uma com seus próprios tamanhos (34 a 43), sem misturar quantidades
+- Para cada tamanho, dentro de cada categoria:
   - **Estoque** (com botões +/- — somente Administrador)
   - **Vendas da semana** (registrar venda — qualquer usuário logado, diminui do estoque)
-  - **A caminho** (compras encomendadas, com +/- — somente Administrador)
+  - **A caminho** (compras já feitas ao fornecedor, aguardando chegar)
   - **Meta** fixa (padrão 10 pares, editável apenas por Administrador)
   - **Compra sugerida da semana**, calculada automaticamente: `Meta - Estoque - A caminho`
-- Recebimento de encomendas: move quantidade de "a caminho" para o estoque
-- Relatórios semanais: fecha a semana (zera as vendas), salva no histórico e permite impressão
+- **Fazer Pedido** ("Mover p/ Correios"): abre um modal com a compra sugerida de cada tamanho; o Administrador informa a quantidade que *realmente* encomendou com o fornecedor (pode ser diferente da sugestão) e confirma — isso é o que entra em "A caminho"
+- **Receber Correios**: abre um modal só com os tamanhos que têm alguma quantidade "a caminho"; o Administrador confirma quanto *realmente chegou* (pode ser menos que o pedido) — evita erro de receber mais do que foi comprado
+- Relatórios semanais: fecha a semana para as 3 categorias de uma vez (zera as vendas), salva no histórico com a categoria de cada linha, e permite impressão
 - Cadastro de usuários (somente Administrador)
 
 ---
@@ -130,18 +132,21 @@ Se quiser restringir também o fechamento de semana só ao Administrador, adicio
 
 ## Principais endpoints da API
 
-| Método | Rota                              | Descrição                              | Acesso |
-|--------|------------------------------------|-----------------------------------------|--------|
-| POST   | `/api/auth/login`                  | Login, retorna token JWT               | Público |
-| GET    | `/api/estoque`                     | Lista os 10 tamanhos com todos os dados | Autenticado |
-| POST   | `/api/estoque/{tamanho}/venda`     | Registra venda (diminui estoque)        | Autenticado |
-| POST   | `/api/estoque/{tamanho}/estoque`   | Ajusta estoque (+/-)                    | Admin |
-| POST   | `/api/estoque/{tamanho}/a-caminho` | Ajusta "a caminho" (+/-)                | Admin |
-| POST   | `/api/estoque/{tamanho}/receber`   | Recebe encomenda (a caminho → estoque)  | Admin |
-| PUT    | `/api/estoque/{tamanho}/meta`      | Altera a meta do tamanho                | Admin |
-| GET    | `/api/relatorios`                  | Histórico de relatórios semanais        | Autenticado |
-| GET    | `/api/relatorios/{id}`             | Detalhe de um relatório                 | Autenticado |
-| POST   | `/api/relatorios/fechar-semana`    | Fecha a semana e zera as vendas         | Autenticado |
-| GET    | `/api/usuarios`                    | Lista usuários                          | Admin |
-| POST   | `/api/usuarios`                    | Cria usuário                            | Admin |
-| DELETE | `/api/usuarios/{id}`               | Desativa usuário                        | Admin |
+| Método | Rota                                          | Descrição                                        | Acesso |
+|--------|------------------------------------------------|---------------------------------------------------|--------|
+| POST   | `/api/auth/login`                               | Login, retorna token JWT                          | Público |
+| GET    | `/api/estoque/categorias`                       | Lista as categorias fixas (CAMPO, FUTSAL, SOCIETY) | Autenticado |
+| GET    | `/api/estoque/{categoria}`                      | Lista os 10 tamanhos daquela categoria             | Autenticado |
+| POST   | `/api/estoque/{categoria}/{tamanho}/venda`      | Registra venda (diminui estoque)                   | Autenticado |
+| POST   | `/api/estoque/{categoria}/{tamanho}/estoque`    | Ajusta estoque (+/-)                               | Admin |
+| POST   | `/api/estoque/{categoria}/{tamanho}/a-caminho`  | Ajusta "a caminho" (+/-) — usado pelo "Fazer Pedido" | Admin |
+| POST   | `/api/estoque/{categoria}/{tamanho}/receber`    | Recebe encomenda (a caminho → estoque)             | Admin |
+| PUT    | `/api/estoque/{categoria}/{tamanho}/meta`       | Altera a meta do tamanho                           | Admin |
+| GET    | `/api/relatorios`                               | Histórico de relatórios semanais                   | Autenticado |
+| GET    | `/api/relatorios/{id}`                          | Detalhe de um relatório (com categoria por linha)  | Autenticado |
+| POST   | `/api/relatorios/fechar-semana`                 | Fecha a semana para as 3 categorias e zera vendas  | Autenticado |
+| GET    | `/api/usuarios`                                 | Lista usuários                                     | Admin |
+| POST   | `/api/usuarios`                                 | Cria usuário                                       | Admin |
+| DELETE | `/api/usuarios/{id}`                            | Desativa usuário                                   | Admin |
+
+`{categoria}` aceita: `CAMPO`, `FUTSAL` ou `SOCIETY`.

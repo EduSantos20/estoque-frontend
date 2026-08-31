@@ -29,9 +29,9 @@ export default function Login() {
       <div className="login-card">
         <div className="login-marca">
           <div className="login-marca-icone">👟</div>
-          <div className="login-marca-texto">Estoque <span>Chuteiras</span></div>
+          <div className="login-marca-texto">Gêmeos <span>Sports</span></div>
         </div>
-        <div className="login-titulo">Entre para acessar o painel de reposição semanal</div>
+        <div className="login-titulo">Entre para acessar o seu estoque!</div>
 
         {erro && <div className="erro-msg">{erro}</div>}
 
