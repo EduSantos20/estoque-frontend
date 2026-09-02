@@ -27,6 +27,7 @@ export default function Login() {
 
   return (
     <div className="login-page">
+      <div className="login-marca-dagua" />
       <div className="login-card">
         <div className="login-marca">
           <div className="login-marca-icone">👟</div>
@@ -62,10 +63,6 @@ export default function Login() {
             {carregando ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
-
-        <div className="login-dica">
-          Usuário administrador padrão: <strong>admin</strong> / senha: <strong>admin123</strong>
-        </div>
       </div>
 
       <div className="login-footer">

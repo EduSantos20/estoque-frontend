@@ -263,13 +263,30 @@ input, select {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
   background:
     radial-gradient(circle at 20% 20%, rgba(34,197,94,0.10), transparent 45%),
     radial-gradient(circle at 80% 80%, rgba(56,189,248,0.08), transparent 45%),
     var(--dark);
 }
 
+.login-marca-dagua {
+  position: absolute;
+  inset: 0;
+  background-image: url('/logo-marca-dagua.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 620px;
+  opacity: 0.06;
+  filter: grayscale(0.4);
+  pointer-events: none;
+  z-index: 0;
+}
+
 .login-card {
+  position: relative;
+  z-index: 1;
   background: var(--card);
   border: 1px solid var(--border);
   width: 380px;
@@ -1119,6 +1136,7 @@ input, select {
   left: 0;
   right: 0;
   padding: 18px;
+  z-index: 2;
 }
 
 .login-footer .app-footer {
