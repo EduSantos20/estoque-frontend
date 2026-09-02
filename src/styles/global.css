@@ -277,9 +277,9 @@ input, select {
   background-image: url('/public/img/logo-marca-dagua.png');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 620px;
-  opacity: 0.06;
-  filter: grayscale(0.4);
+  background-size: 200px;
+  opacity: 0.08;
+  filter: grayscale(0.7);
   pointer-events: none;
   z-index: 0;
 }
