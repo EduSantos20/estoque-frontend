@@ -274,7 +274,7 @@ input, select {
 .login-marca-dagua {
   position: absolute;
   inset: 0;
-  background-image: url('/logo-marca-dagua.png');
+  background-image: url('/public/logo-marca-dagua.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 620px;
