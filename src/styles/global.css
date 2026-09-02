@@ -986,3 +986,44 @@ input, select {
   background: var(--green-600);
   color: white;
 }
+
+/* ---------- Modal "escolher categoria" (venda) ---------- */
+.modal-card-pequeno {
+  width: 380px;
+}
+
+.modal-opcoes-categoria {
+  display: flex;
+  gap: 10px;
+  padding: 18px 22px 8px;
+}
+
+.opcao-categoria-venda {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--dark);
+  color: var(--texto);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.opcao-categoria-venda:hover:not(:disabled) {
+  border-color: var(--green-500);
+  background: rgba(34,197,94,0.08);
+  color: var(--green-500);
+}
+
+.opcao-categoria-venda:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.opcao-categoria-icone {
+  font-size: 24px;
+}

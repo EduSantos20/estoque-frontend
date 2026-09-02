@@ -3,6 +3,7 @@ import api from '../api/api'
 import { useAuth } from '../context/AuthContext.jsx'
 import ReceberCorreiosModal from '../components/ReceberCorreiosModal.jsx'
 import FazerPedidoModal from '../components/FazerPedidoModal.jsx'
+import SelecionarCategoriaVendaModal from '../components/SelecionarCategoriaVendaModal.jsx'
 
 const CATEGORIAS = [
   { valor: 'CAMPO', label: 'Campo' },
@@ -24,6 +25,8 @@ export default function Estoque() {
   const [processando, setProcessando] = useState(false)
   const [modalReceberAberto, setModalReceberAberto] = useState(false)
   const [modalPedidoAberto, setModalPedidoAberto] = useState(false)
+  const [vendaTamanho, setVendaTamanho] = useState(null)
+  const [vendaEnviando, setVendaEnviando] = useState(false)
   const { isAdmin } = useAuth()
 
   async function carregar(categoriaAlvo = categoria) {
@@ -75,12 +78,36 @@ export default function Estoque() {
     }
   }
 
-  async function registrarVenda(tamanho) {
-    try {
-      const { data } = await api.post(`/estoque/${categoria}/${tamanho}/venda`, { quantidade: 1 })
+  async function registrarVenda(tamanho, categoriaVenda) {
+    const { data } = await api.post(`/estoque/${categoriaVenda}/${tamanho}/venda`, { quantidade: 1 })
+    // só atualiza a tabela na tela se a venda foi da mesma categoria que está sendo exibida
+    if (categoriaVenda === categoria) {
       atualizarLinha(tamanho, data)
+    }
+    return data
+  }
+
+  function abrirModalVenda(tamanho) {
+    setVendaTamanho(tamanho)
+  }
+
+  function fecharModalVenda() {
+    setVendaTamanho(null)
+  }
+
+  async function confirmarVenda(categoriaEscolhida) {
+    setVendaEnviando(true)
+    try {
+      await registrarVenda(vendaTamanho, categoriaEscolhida)
+      const labelEscolhida = CATEGORIAS.find((c) => c.valor === categoriaEscolhida)?.label || categoriaEscolhida
+      setVendaTamanho(null)
+      if (categoriaEscolhida !== categoria) {
+        alert(`Venda registrada em ${labelEscolhida}, tamanho ${vendaTamanho}.`)
+      }
     } catch (err) {
       alert(err.response?.data?.mensagem || 'Erro ao registrar venda')
+    } finally {
+      setVendaEnviando(false)
     }
   }
 
@@ -317,9 +344,8 @@ export default function Estoque() {
                           <div className="acao-rapida">
                             <button
                               className="btn-icone"
-                              title="Registrar 1 venda"
-                              onClick={() => registrarVenda(item.tamanho)}
-                              disabled={item.estoque <= 0}
+                              title="Registrar venda"
+                              onClick={() => abrirModalVenda(item.tamanho)}
                             >
                               🛒
                             </button>
@@ -358,6 +384,15 @@ export default function Estoque() {
           itens={itens}
           onClose={() => setModalPedidoAberto(false)}
           onConfirm={confirmarPedidoModal}
+        />
+      )}
+
+      {vendaTamanho !== null && (
+        <SelecionarCategoriaVendaModal
+          tamanho={vendaTamanho}
+          onClose={fecharModalVenda}
+          onSelecionar={confirmarVenda}
+          enviando={vendaEnviando}
         />
       )}
     </div>
