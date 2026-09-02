@@ -21,7 +21,6 @@ export default function Estoque() {
   const [itens, setItens] = useState([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
-  const [metasEditando, setMetasEditando] = useState({})
   const [processando, setProcessando] = useState(false)
   const [modalReceberAberto, setModalReceberAberto] = useState(false)
   const [modalPedidoAberto, setModalPedidoAberto] = useState(false)
@@ -85,17 +84,14 @@ export default function Estoque() {
     }
   }
 
-  async function salvarMeta(tamanho) {
-    const novaMeta = metasEditando[tamanho]
-    if (novaMeta === undefined || novaMeta === '') return
+  async function ajustarMeta(tamanho, delta) {
+    const item = itens.find((i) => i.tamanho === tamanho)
+    if (!item) return
+    const novaMeta = item.meta + delta
+    if (novaMeta < 0) return
     try {
-      const { data } = await api.put(`/estoque/${categoria}/${tamanho}/meta`, { meta: Number(novaMeta) })
+      const { data } = await api.put(`/estoque/${categoria}/${tamanho}/meta`, { meta: novaMeta })
       atualizarLinha(tamanho, data)
-      setMetasEditando((prev) => {
-        const copia = { ...prev }
-        delete copia[tamanho]
-        return copia
-      })
     } catch (err) {
       alert(err.response?.data?.mensagem || 'Erro ao alterar meta')
     }
@@ -252,7 +248,6 @@ export default function Estoque() {
                 <tbody>
                   {itens.map((item) => {
                     const status = statusDoTamanho(item)
-                    const metaEmEdicao = metasEditando[item.tamanho]
                     return (
                       <tr key={item.tamanho}>
                         <td>
@@ -306,17 +301,10 @@ export default function Estoque() {
 
                         <td>
                           {isAdmin ? (
-                            <div className="meta-editavel">
-                              <input
-                                type="number"
-                                min="0"
-                                value={metaEmEdicao !== undefined ? metaEmEdicao : item.meta}
-                                onChange={(e) =>
-                                  setMetasEditando((prev) => ({ ...prev, [item.tamanho]: e.target.value }))
-                                }
-                                onBlur={() => salvarMeta(item.tamanho)}
-                                onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
-                              />
+                            <div className="stepper">
+                              <button onClick={() => ajustarMeta(item.tamanho, -1)} disabled={item.meta <= 0}>−</button>
+                              <span className="valor">{item.meta}</span>
+                              <button onClick={() => ajustarMeta(item.tamanho, 1)}>+</button>
                             </div>
                           ) : (
                             item.meta
