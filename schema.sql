@@ -50,6 +50,16 @@ CREATE TABLE relatorio_detalhe (
     compra_sugerida     INTEGER NOT NULL DEFAULT 0
 );
 
+-- Historico de vendas individuais (quem vendeu, quando, quanto)
+CREATE TABLE venda (
+    id              BIGSERIAL PRIMARY KEY,
+    categoria       VARCHAR(20) NOT NULL,
+    tamanho         INTEGER NOT NULL,
+    quantidade      INTEGER NOT NULL,
+    usuario         VARCHAR(60) NOT NULL,
+    data_hora       TIMESTAMP NOT NULL
+);
+
 -- Seed das 3 categorias x 10 tamanhos fixos (34 a 43) = 30 linhas
 INSERT INTO estoque_tamanho (categoria, tamanho, estoque, vendas_semana, a_caminho, meta)
 SELECT c, g, 0, 0, 0, 10

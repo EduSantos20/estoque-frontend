@@ -31,6 +31,11 @@ export default function Navbar() {
           Relatórios
         </NavLink>
         {isAdmin && (
+          <NavLink to="/vendas" className={({ isActive }) => `topbar-link ${isActive ? 'ativo' : ''}`}>
+            Histórico de Vendas
+          </NavLink>
+        )}
+        {isAdmin && (
           <NavLink to="/usuarios" className={({ isActive }) => `topbar-link ${isActive ? 'ativo' : ''}`}>
             Usuários
           </NavLink>

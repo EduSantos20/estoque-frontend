@@ -4,6 +4,7 @@ import Estoque from './pages/Estoque.jsx'
 import Relatorios from './pages/Relatorios.jsx'
 import RelatorioDetalhe from './pages/RelatorioDetalhe.jsx'
 import Usuarios from './pages/Usuarios.jsx'
+import Vendas from './pages/Vendas.jsx'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
@@ -51,6 +52,17 @@ export default function App() {
           <ProtectedRoute>
             <LayoutPrivado>
               <RelatorioDetalhe />
+            </LayoutPrivado>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/vendas"
+        element={
+          <ProtectedRoute apenasAdmin>
+            <LayoutPrivado>
+              <Vendas />
             </LayoutPrivado>
           </ProtectedRoute>
         }
