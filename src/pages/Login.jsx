@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
+import Footer from '../components/Footer.jsx'
 
 export default function Login() {
   const [username, setUsername] = useState('')
@@ -29,9 +30,9 @@ export default function Login() {
       <div className="login-card">
         <div className="login-marca">
           <div className="login-marca-icone">👟</div>
-          <div className="login-marca-texto">Gêmeos <span>Sports</span></div>
+          <div className="login-marca-texto">Estoque <span>Chuteiras</span></div>
         </div>
-        <div className="login-titulo">Entre para acessar o seu estoque!</div>
+        <div className="login-titulo">Entre para acessar o painel de reposição semanal</div>
 
         {erro && <div className="erro-msg">{erro}</div>}
 
@@ -62,9 +63,13 @@ export default function Login() {
           </button>
         </form>
 
-        {/* <div className="login-dica">
+        <div className="login-dica">
           Usuário administrador padrão: <strong>admin</strong> / senha: <strong>admin123</strong>
-        </div>*/}
+        </div>
+      </div>
+
+      <div className="login-footer">
+        <Footer />
       </div>
     </div>
   )

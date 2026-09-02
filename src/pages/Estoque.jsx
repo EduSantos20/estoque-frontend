@@ -146,6 +146,24 @@ export default function Estoque() {
     setModalPedidoAberto(false)
   }
 
+  function copiarPedido() {
+    const sugeridos = itens.filter((i) => i.compraSugerida > 0)
+    if (sugeridos.length === 0) {
+      alert('Não há compra sugerida no momento para copiar.')
+      return
+    }
+    const linhas = sugeridos.map((i) => `Nº ${i.tamanho}: ${i.compraSugerida} par(es)`)
+    const texto = `Pedido semanal — ${labelCategoria}\n${linhas.join('\n')}`
+
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(texto)
+        .then(() => alert('Pedido copiado! Agora é só colar para o fornecedor.'))
+        .catch(() => alert(texto))
+    } else {
+      alert(texto)
+    }
+  }
+
   async function novaSemana() {
     const confirmar = window.confirm(
       'Isso vai fechar a semana atual para TODAS as categorias (Campo, Futsal e Society), salvar o relatório de vendas no histórico e zerar o contador de vendas para começar do zero. Confirmar?'
@@ -244,14 +262,36 @@ export default function Estoque() {
           </div>
 
           <div className="card-pedido">
-            <div>
-              <div className="card-pedido-label">Relatório automático · {labelCategoria}</div>
-              <div className="card-pedido-titulo">📋 Resumo do pedido semanal p/ fornecedor</div>
+            <div className="card-pedido-topo">
+              <div>
+                <div className="card-pedido-label">Relatório automático</div>
+                <div className="card-pedido-titulo">📋 Resumo do pedido semanal p/ fornecedor</div>
+              </div>
+              {isAdmin && (
+                <div className="card-pedido-botoes no-print">
+                  <button className="btn-header verde" onClick={copiarPedido}>
+                    📋 Copiar Pedido
+                  </button>
+                  <button className="btn-header laranja" onClick={abrirModalPedido}>
+                    🚚 Mover p/ Correios
+                  </button>
+                </div>
+              )}
             </div>
-            {isAdmin && (
-              <button className="btn-header laranja no-print" onClick={abrirModalPedido}>
-                🚚 Mover p/ Correios
-              </button>
+
+            {itens.filter((i) => i.compraSugerida > 0).length > 0 ? (
+              <div className="grade-pedido-sugestoes">
+                {itens
+                  .filter((i) => i.compraSugerida > 0)
+                  .map((i) => (
+                    <div key={i.tamanho} className="chip-sugestao">
+                      <strong>Nº {i.tamanho}</strong>
+                      <span>{i.compraSugerida} par(es)</span>
+                    </div>
+                  ))}
+              </div>
+            ) : (
+              <div className="card-pedido-vazio">Nenhuma compra sugerida em {labelCategoria} no momento.</div>
             )}
           </div>
 

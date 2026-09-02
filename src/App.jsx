@@ -5,6 +5,7 @@ import Relatorios from './pages/Relatorios.jsx'
 import RelatorioDetalhe from './pages/RelatorioDetalhe.jsx'
 import Usuarios from './pages/Usuarios.jsx'
 import Navbar from './components/Navbar.jsx'
+import Footer from './components/Footer.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 function LayoutPrivado({ children }) {
@@ -12,6 +13,7 @@ function LayoutPrivado({ children }) {
     <div className="app-shell">
       <Navbar />
       {children}
+      <Footer />
     </div>
   )
 }
