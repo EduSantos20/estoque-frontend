@@ -52,12 +52,17 @@ CREATE TABLE relatorio_detalhe (
 
 -- Historico de vendas individuais (quem vendeu, quando, quanto)
 CREATE TABLE venda (
-    id              BIGSERIAL PRIMARY KEY,
-    categoria       VARCHAR(20) NOT NULL,
-    tamanho         INTEGER NOT NULL,
-    quantidade      INTEGER NOT NULL,
-    usuario         VARCHAR(60) NOT NULL,
-    data_hora       TIMESTAMP NOT NULL
+    id                      BIGSERIAL PRIMARY KEY,
+    categoria               VARCHAR(20) NOT NULL,
+    tamanho                 INTEGER NOT NULL,
+    quantidade              INTEGER NOT NULL,
+    usuario                 VARCHAR(60) NOT NULL,
+    data_hora               TIMESTAMP NOT NULL,
+    -- cancelamento (estorno): a venda nao e apagada, apenas marcada
+    cancelada               BOOLEAN NOT NULL DEFAULT FALSE,
+    cancelada_por           VARCHAR(60),
+    cancelada_em            TIMESTAMP,
+    motivo_cancelamento     VARCHAR(255)
 );
 
 -- Seed das 3 categorias x 10 tamanhos fixos (34 a 43) = 30 linhas
