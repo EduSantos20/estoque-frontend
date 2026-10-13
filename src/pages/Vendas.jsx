@@ -37,7 +37,13 @@ export default function Vendas() {
   }, [filtroCategoria])
 
   function formatarDataHora(dataStr) {
-    return new Date(dataStr).toLocaleString('pt-BR')
+    // Garante que o JavaScript entende a data como UTC adicionando 'Z' no final, caso falte
+    const dataUTC = dataStr.endsWith('Z') ? dataStr : `${dataStr}Z`;
+    
+    // Converte para o fuso horário local do Brasil
+    return new Date(dataUTC).toLocaleString('pt-BR', {
+      timeZone: 'America/Sao_Paulo'
+    });
   }
 
   const labelCategoria = (valor) => CATEGORIAS.find((c) => c.valor === valor)?.label || valor
