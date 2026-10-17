@@ -16,8 +16,31 @@ CREATE TABLE usuarios (
     nome_completo   VARCHAR(120),
     senha           VARCHAR(255) NOT NULL,
     role            VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'USER')),
-    ativo           BOOLEAN NOT NULL DEFAULT TRUE
+    ativo           BOOLEAN NOT NULL DEFAULT TRUE,
+    -- ponto digital
+    controla_ponto      BOOLEAN NOT NULL DEFAULT FALSE,
+    hora_entrada        TIME,
+    hora_saida          TIME,
+    tolerancia_minutos  INTEGER,
+    intervalo_minutos   INTEGER,
+    dias_trabalho       VARCHAR(20),          -- ISO: 1=seg ... 7=dom (ex: '1,2,3,4,5,6')
+    salario_mensal      NUMERIC(12,2),
+    ponto_desde         DATE
 );
+
+-- Batidas de ponto (horario sempre do servidor; ajustes ficam auditados)
+CREATE TABLE ponto_batida (
+    id                  BIGSERIAL PRIMARY KEY,
+    usuario_id          BIGINT NOT NULL REFERENCES usuarios(id),
+    data_hora           TIMESTAMP NOT NULL,
+    origem              VARCHAR(10) NOT NULL DEFAULT 'BATIDA' CHECK (origem IN ('BATIDA', 'MANUAL')),
+    data_hora_original  TIMESTAMP,
+    ajustado_por        VARCHAR(60),
+    ajustado_em         TIMESTAMP,
+    justificativa       VARCHAR(255),
+    removida            BOOLEAN NOT NULL DEFAULT FALSE
+);
+CREATE INDEX idx_ponto_usuario_data ON ponto_batida (usuario_id, data_hora);
 
 CREATE TABLE estoque_tamanho (
     id              BIGSERIAL PRIMARY KEY,

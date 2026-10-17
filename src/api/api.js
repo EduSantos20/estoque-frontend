@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://estoque-backend-pk9s.onrender.com/api',
+  baseURL: 'http://localhost:8080/api',
 })
 
 api.interceptors.request.use((config) => {

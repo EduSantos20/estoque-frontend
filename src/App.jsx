@@ -5,6 +5,9 @@ import Relatorios from './pages/Relatorios.jsx'
 import RelatorioDetalhe from './pages/RelatorioDetalhe.jsx'
 import Usuarios from './pages/Usuarios.jsx'
 import Vendas from './pages/Vendas.jsx'
+import MeuPonto from './pages/MeuPonto.jsx'
+import ControlePonto from './pages/ControlePonto.jsx'
+import ControlePontoUsuario from './pages/ControlePontoUsuario.jsx'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
@@ -52,6 +55,39 @@ export default function App() {
           <ProtectedRoute>
             <LayoutPrivado>
               <RelatorioDetalhe />
+            </LayoutPrivado>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/meu-ponto"
+        element={
+          <ProtectedRoute>
+            <LayoutPrivado>
+              <MeuPonto />
+            </LayoutPrivado>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/controle-ponto"
+        element={
+          <ProtectedRoute apenasAdmin>
+            <LayoutPrivado>
+              <ControlePonto />
+            </LayoutPrivado>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/controle-ponto/usuario/:id"
+        element={
+          <ProtectedRoute apenasAdmin>
+            <LayoutPrivado>
+              <ControlePontoUsuario />
             </LayoutPrivado>
           </ProtectedRoute>
         }
