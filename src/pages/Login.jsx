@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.jsx";
-import Footer from "../components/Footer.jsx";
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext.jsx'
+import Footer from '../components/Footer.jsx'
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [senha, setSenha] = useState("");
-  const [erro, setErro] = useState("");
-  const [carregando, setCarregando] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const [username, setUsername] = useState('')
+  const [senha, setSenha] = useState('')
+  const [erro, setErro] = useState('')
+  const [carregando, setCarregando] = useState(false)
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    setErro("");
-    setCarregando(true);
+    e.preventDefault()
+    setErro('')
+    setCarregando(true)
     try {
-      await login(username, senha);
-      navigate("/");
+      await login(username, senha)
+      navigate('/')
     } catch (err) {
-      setErro(err.response?.data?.mensagem || "Usuário ou senha inválidos");
+      setErro(err.response?.data?.mensagem || 'Usuário ou senha inválidos')
     } finally {
-      setCarregando(false);
+      setCarregando(false)
     }
   }
 
@@ -62,13 +62,18 @@ export default function Login() {
             />
           </div>
           <button className="btn-primario" type="submit" disabled={carregando}>
-            {carregando ? "Entrando..." : "Entrar"}
+            {carregando ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
+
+        <div className="login-dica">
+          Usuário administrador padrão: <strong>admin</strong> / senha: <strong>admin123</strong>
+        </div>
       </div>
+
       <div className="login-footer">
         <Footer />
       </div>
     </div>
-  );
+  )
 }
